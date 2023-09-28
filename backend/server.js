@@ -1,9 +1,9 @@
-require("dotenv").config();
+import express from "express";
+import 'dotenv/config';
+import workoutRoutes from "./routes/cards.js"
 
-const express = require("express");
 const app = express();
 const port = process.env.PORT;
-const workoutRoutes = require("./routes/cards");
 
 app.use(express.json());
 app.use((req, res, next) => {

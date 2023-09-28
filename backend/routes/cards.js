@@ -1,8 +1,18 @@
-const express = require("express");
+import database from "../database/database.js";
+import express from "express";
+
+const app = express();
 const router = express.Router();
 
+app.use(express.json());
+
 router.get("/", (req, res) => {
-    res.json({message: "GET all cards"})
+    const q = "SELECT * FROM nikismanager.cards"
+
+    database.query(q, (error, data) => {
+        if (error) return res.json(error)
+        return res.json(data)
+    })
 });
 
 router.get("/:id", (req, res) => {
@@ -10,7 +20,13 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    res.json({ message: "POST a new card" });
+    const q = "INSERT INTO cards (`title`, `task`) VALUES (?)"
+    const values = [req.body.title, req.body.task]
+
+    database.query(q, [values], (error, data) => {
+        if (error) return res.json(error)
+        return res.json("Book created")
+    })
 });
 
 router.delete("/:id", (req, res) => {
@@ -20,4 +36,4 @@ router.patch("/:id", (req, res) => {
     res.json({ message: "PATCH a new card" });
 });
 
-module.exports = router;
+export default router;
